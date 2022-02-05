@@ -16,14 +16,14 @@ using namespace Rcpp;
 
 // [[Rcpp::export]]
 List drbartRcppHeteroClean(NumericVector y_, 
-              NumericVector x_, //NumericVector xpred_, 
-              NumericVector xprec_, //NumericVector xpredprec_, 
+              NumericVector x_, 
+              NumericVector xprec_, 
               List xinfo_list,
-              List xinfo_prec_list, //xinfo for precision
+              List xinfo_prec_list, 
               int burn, int nd, int thin, int printevery,
               int m, int mprec, double alpha, double beta,
               double lambda, double nu, double kfac,
-              double phi0, //baseline precision
+              double phi0, 
               bool scalemix,
               IntegerVector trunc_below,
               CharacterVector treef_name_,
@@ -125,9 +125,6 @@ List drbartRcppHeteroClean(NumericVector y_,
   for (size_t i = 0;i < m; i++) {
     t[i].setm(ybar / m); //if you sum the fit over the trees you get the fit.
   }
-  // n x m matrix for fits
-  NumericMatrix mean_fits(n, m);
-  mean_fits.fill(ybar / m);
   
   std::vector<tree> tprec(mprec);
   double tleaf = 1.0;//pow(phi0, 1.0/mprec);
@@ -193,13 +190,6 @@ List drbartRcppHeteroClean(NumericVector y_,
   //end hetero
   
   NumericVector ssigma(nd);
-  NumericMatrix sfit(nd, n);
-  //NumericMatrix spred2(nd,dip.n);
-  
-  //begin hetero
-  NumericMatrix sfitprec(nd, n);
-  //NumericMatrix spred2prec(nd,dip.n);
-  //end hetero
   
   //save stuff to tree file
   treef << xi << endl; //cutpoints
@@ -267,7 +257,6 @@ List drbartRcppHeteroClean(NumericVector y_,
        fit(t[j], xi, di, ftemp);
        for (size_t k = 0; k < n; k++) { 
          allfit[k] += ftemp[k];
-         mean_fits(k, j) = ftemp[k];
        }
     }
     
@@ -482,11 +471,6 @@ List drbartRcppHeteroClean(NumericVector y_,
       }
       
       ssigma((i - burn) / thin) = phistar;
-
-      for(size_t k = 0; k < n; k++) {
-        sfit((i - burn) / thin, k) = allfit[k];
-        sfitprec((i - burn) / thin, k) = allfitprec[k];
-      }
     }
   }
 
@@ -497,12 +481,6 @@ List drbartRcppHeteroClean(NumericVector y_,
   
   treef.close();
 
-  return(List::create(_["postfit"] = sfit, //_["postpred"] = spred, 
-                      _["postprecfit"] = sfitprec,
-                      _["phistar"] = ssigma,
-                      _["ucuts"] = ucuts_post,
-                      _["cts"] = leaf_counts,
-                      _["mean_fits"] = mean_fits
-                      //_["allfit"] = allfit
-                      ));
+  return(List::create(_["phistar"] = ssigma,
+                      _["ucuts"] = ucuts_post));
 }
