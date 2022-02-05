@@ -36,6 +36,7 @@
 #' @param nsim Number of MCMC iterations to be returned.
 #' @param nthin Thinning parameter for the MCMC -- the number of iterations run
 #'   before one is stored.
+#' @param printevery How often should the number of MCMC iterations be printed.
 #' @param m_mean,m_var Number of trees used to model the mean, variance
 #'   functions.
 #' @param alpha,beta Hyperparameters for the tree splitting prior. The
@@ -71,7 +72,8 @@
 #'
 #' @examples
 drbart <- function(y, x, 
-                   nburn = 5000, nsim = 5000,  nthin = 1, printevery = 50,
+                   nburn = 5000, nsim = 5000,  nthin = 1, 
+                   printevery = round((nburn + nsim) / 20),
                    m_mean = 200, m_var = 100, alpha = 0.95, beta = 2,
                    lambda = 1, 
                    nu = 2, kfac = 2, phi0 = 1, 

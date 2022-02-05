@@ -10,7 +10,7 @@ drbart(
   nburn = 5000,
   nsim = 5000,
   nthin = 1,
-  printevery = 50,
+  printevery = round((nburn + nsim)/20),
   m_mean = 200,
   m_var = 100,
   alpha = 0.95,
@@ -40,6 +40,8 @@ columns to different covariates.}
 \item{nthin}{Thinning parameter for the MCMC -- the number of iterations run
 before one is stored.}
 
+\item{printevery}{How often should the number of MCMC iterations be printed.}
+
 \item{m_mean, m_var}{Number of trees used to model the mean, variance
 functions.}
 
@@ -52,14 +54,15 @@ probability that a node at depth d splits is given by \eqn{\alpha / (1 + d)
 \item{kfac}{Hyperparameter in the variance term of the prior for the mu.
 Larger values imply larger shrinkage of the fit towards 0.}
 
-\item{phi0}{}
+\item{phi0}{Baseline precision if \code{variance = 'x'} or \code{variance =
+'ux'}.}
 
-\item{variance}{One of \code{'ux'}, \code{'x'}, or \code{'const'}. If \code{'ux'}, the variance
-term is treated as a function of both the latent u and the observed x,
-which can be helpful for flexible learning in finite sample settings. If
-\code{'x'}, the variance is solely a function of x, allowing for
-heteroscedasticity in the observed covariates. If \code{'const'}, an assumption
-of constant variance is made.}
+\item{variance}{One of \code{'ux'}, \code{'x'}, or \code{'const'}. If
+\code{'ux'}, the variance term is treated as a function of both the latent
+u and the observed x, which can be helpful for flexible learning in finite
+sample settings. If \code{'x'}, the variance is solely a function of x,
+allowing for heteroscedasticity in the observed covariates. If
+\code{'const'}, an assumption of constant variance is made.}
 
 \item{censor}{A logical vector denoting which values of \code{y}, if any, are
 censored from below. Such observations will be imputed within the sampler.
@@ -71,9 +74,9 @@ used for prediction after model fitting.}
 
 \item{mean_cuts, prec_cuts}{Optional. Cut points to consider when building
 trees to model the mean, variance function, respectively. If supplied, a
-list of length \code{ncol(x)} containing the split points associated with each
-covariate. Otherwise, an intelligent choice based off observed covariate
-values will be made.}
+list of length \code{ncol(x)} containing the split points associated with
+each covariate. Otherwise, an intelligent choice based off observed
+covariate values will be made.}
 }
 \value{
 An object of class `drbart`, containing:
