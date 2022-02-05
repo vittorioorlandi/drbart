@@ -1,3 +1,34 @@
+# std <- 0.3
+# mid <- 0.8
+# 
+# gamma_shape <- function(x) {
+#   return(0.5 + x ^ 2)
+# }
+# 
+# m <- function(x) {
+#   return(1 + 2 * (x - mid))
+# }
+# 
+# p <- function(x) {
+#   return(exp(-10 * (x - mid) ^ 2))
+# }
+# 
+# mu0 <- function(x) {
+#   return(5 * exp(15 * (x - 0.5)) / (1 + exp(15 * (x - 0.5))) - 4 * x)
+# }
+# 
+# # Generation function
+# r <- function(x) {
+#   n <- length(x)
+#   z <- rbinom(n, 1, p(x))
+#   return(z * rnorm(n, m(x), std) +
+#            (1 - z) * log(rgamma(n, gamma_shape(x), 1)) + mu0(x))
+# }
+# 
+# n <- 800
+# x <- runif(n)
+# y <- r(x)
+
 check_args <- function(x, y, 
                        nburn, nsim, nthin, 
                        m_mean, m_var, alpha, beta, lambda, nu, kfac, censor,
@@ -152,7 +183,7 @@ drbart <- function(y, x,
     out <- drbartRcppHeteroClean(y, t(ux), t(ux), 
                                  mean_cuts, prec_cuts,
                                  nburn, nsim, nthin, printevery,
-                                 m_mean, m_var, 
+                                 m_mean, m_var, alpha, beta,
                                  lambda, nu, kfac, phi0, 
                                  TRUE,
                                  censor,
@@ -162,7 +193,7 @@ drbart <- function(y, x,
     out <- drbartRcppHeteroClean(y, t(ux), t(x), 
                                  mean_cuts, prec_cuts,
                                  nburn, nsim, nthin, printevery,
-                                 m_mean, m_var, 
+                                 m_mean, m_var, alpha, beta,
                                  lambda, nu, kfac, phi0, 
                                  FALSE,
                                  censor,

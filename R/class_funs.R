@@ -5,7 +5,8 @@ get_q_from_cdf <- function(p, grid, cdf) approxfun(cdf, grid, ties = 'ordered')(
 get_mean_from_pdf <- function(grid, pdf) {
   pdf_fun <- approxfun(grid, pdf, ties = 'ordered') 
   return(integrate(function(z) pdf_fun(z) * z, 
-                   lower = min(grid), upper = max(grid))$value)
+                   lower = min(grid), upper = max(grid),
+                   stop.on.error = FALSE)$value)
 }
 
 #' Posterior Predictive Quantities from DR-BART
@@ -102,7 +103,7 @@ predict.drbart <- function(object, xpred, ygrid,
     })
     
     if (variance == 'const' | variance == 'x') {
-      if (type == 'quantiles') {
+      if (type == 'quantiles' | type == 'distribution') {
         post_fun <- pmixnorm0_post
       }
       else {
@@ -110,7 +111,7 @@ predict.drbart <- function(object, xpred, ygrid,
       }
     }
     else {
-      if (type == 'quantiles') {
+      if (type == 'quantiles' | type == 'distribution') {
         post_fun <- pmixnorm_post
       }
       else {
@@ -278,11 +279,13 @@ plot.drbart <- function(x, xpred, ygrid,
     }
   }
   else {
-    plot(vals, summary_preds[, 1, 1], type = 'l', col = colors[1], 
-         xlab = 'x', ylab = 'E(y|x)')
+    plot(vals, summary_preds[, 1, 1], col = colors[1], pch = 19,
+         xlab = 'x', ylab = 'E(y|x)', ylim = limits)
     if (CI) {
-      lines(vals, summary_preds[, 1, 2], lty = 'dashed', col = colors[1])
-      lines(vals, summary_preds[, 1, 3], lty = 'dashed', col = colors[1])
+      # lines(vals, summary_preds[, 1, 2], lty = 'dashed', col = colors[1])
+      # lines(vals, summary_preds[, 1, 3], lty = 'dashed', col = colors[1])
+      points(vals, summary_preds[, 1, 2], pch = 1, col = colors[1])
+      points(vals, summary_preds[, 1, 3], pch = 1, col = colors[1])
     }
   }
   

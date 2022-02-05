@@ -174,6 +174,37 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// drbartRcppHeteroClean
+List drbartRcppHeteroClean(NumericVector y_, NumericVector x_, NumericVector xprec_, List xinfo_list, List xinfo_prec_list, int burn, int nd, int thin, int printevery, int m, int mprec, double alpha, double beta, double lambda, double nu, double kfac, double phi0, bool scalemix, IntegerVector trunc_below, CharacterVector treef_name_, CharacterVector treef_prec_name_);
+RcppExport SEXP _drbart_drbartRcppHeteroClean(SEXP y_SEXP, SEXP x_SEXP, SEXP xprec_SEXP, SEXP xinfo_listSEXP, SEXP xinfo_prec_listSEXP, SEXP burnSEXP, SEXP ndSEXP, SEXP thinSEXP, SEXP printeverySEXP, SEXP mSEXP, SEXP mprecSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP kfacSEXP, SEXP phi0SEXP, SEXP scalemixSEXP, SEXP trunc_belowSEXP, SEXP treef_name_SEXP, SEXP treef_prec_name_SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type y_(y_SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type x_(x_SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type xprec_(xprec_SEXP);
+    Rcpp::traits::input_parameter< List >::type xinfo_list(xinfo_listSEXP);
+    Rcpp::traits::input_parameter< List >::type xinfo_prec_list(xinfo_prec_listSEXP);
+    Rcpp::traits::input_parameter< int >::type burn(burnSEXP);
+    Rcpp::traits::input_parameter< int >::type nd(ndSEXP);
+    Rcpp::traits::input_parameter< int >::type thin(thinSEXP);
+    Rcpp::traits::input_parameter< int >::type printevery(printeverySEXP);
+    Rcpp::traits::input_parameter< int >::type m(mSEXP);
+    Rcpp::traits::input_parameter< int >::type mprec(mprecSEXP);
+    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< double >::type kfac(kfacSEXP);
+    Rcpp::traits::input_parameter< double >::type phi0(phi0SEXP);
+    Rcpp::traits::input_parameter< bool >::type scalemix(scalemixSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type trunc_below(trunc_belowSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type treef_name_(treef_name_SEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type treef_prec_name_(treef_prec_name_SEXP);
+    rcpp_result_gen = Rcpp::wrap(drbartRcppHeteroClean(y_, x_, xprec_, xinfo_list, xinfo_prec_list, burn, nd, thin, printevery, m, mprec, alpha, beta, lambda, nu, kfac, phi0, scalemix, trunc_below, treef_name_, treef_prec_name_));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 RcppExport SEXP _rcpp_module_boot_TreeSamples();
 
@@ -189,6 +220,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_drbart_dmixnorm_post", (DL_FUNC) &_drbart_dmixnorm_post, 4},
     {"_drbart_pmixnorm_post", (DL_FUNC) &_drbart_pmixnorm_post, 4},
     {"_drbart_drbartRcppClean", (DL_FUNC) &_drbart_drbartRcppClean, 16},
+    {"_drbart_drbartRcppHeteroClean", (DL_FUNC) &_drbart_drbartRcppHeteroClean, 21},
     {"_rcpp_module_boot_TreeSamples", (DL_FUNC) &_rcpp_module_boot_TreeSamples, 0},
     {NULL, NULL, 0}
 };
