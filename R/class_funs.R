@@ -1,14 +1,5 @@
 Rcpp::loadModule("TreeSamples", TRUE)
 
-get_q_from_cdf <- function(p, grid, cdf) approxfun(cdf, grid, ties = 'ordered')(p)
-
-get_mean_from_pdf <- function(grid, pdf) {
-  pdf_fun <- approxfun(grid, pdf, ties = 'ordered') 
-  return(integrate(function(z) pdf_fun(z) * z, 
-                   lower = min(grid), upper = max(grid),
-                   stop.on.error = FALSE)$value)
-}
-
 #' Posterior Predictive Quantities from DR-BART
 #' 
 #' Compute and plot conditional density functions, distribution functions,
@@ -188,10 +179,10 @@ plot.drbart <- function(x, xpred, ygrid,
     }
     if (n_colors > 9) {
       warning(paste0('The used color palette only allows for 9 distinct ', 
-                     'colors, while you are asking to plot ', nrow(xpred), ' ',
-                     'different conditional densities. Coloring and an ',
-                     'associated legend to identify the conditional densities ',
-                     'will be suppressed.'))
+                     'colors, while you are asking to plot information from', 
+                     nrow(xpred), ' different conditional densiies. Coloring ',
+                     'and an associated legend to identify the conditional ',
+                     'densities will be suppressed.'))
     }
   }
   else {
