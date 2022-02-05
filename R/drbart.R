@@ -1,34 +1,3 @@
-# std <- 0.3
-# mid <- 0.8
-# 
-# gamma_shape <- function(x) {
-#   return(0.5 + x ^ 2)
-# }
-# 
-# m <- function(x) {
-#   return(1 + 2 * (x - mid))
-# }
-# 
-# p <- function(x) {
-#   return(exp(-10 * (x - mid) ^ 2))
-# }
-# 
-# mu0 <- function(x) {
-#   return(5 * exp(15 * (x - 0.5)) / (1 + exp(15 * (x - 0.5))) - 4 * x)
-# }
-# 
-# # Generation function
-# r <- function(x) {
-#   n <- length(x)
-#   z <- rbinom(n, 1, p(x))
-#   return(z * rnorm(n, m(x), std) +
-#            (1 - z) * log(rgamma(n, gamma_shape(x), 1)) + mu0(x))
-# }
-# 
-# n <- 800
-# x <- runif(n)
-# y <- r(x)
-
 #' Density Regression with Bayesian Additive Regression Trees
 #' 
 #' Fits a density regression model using DR-BART.
@@ -63,25 +32,26 @@
 #' @param y A vector of observed responses.
 #' @param x A matrix of observed covariates. Rows correspond to observations and
 #'   columns to different covariates.
-#' @param nburn Number of MCMC burn-in iterations 
-#' @param nsim Number of MCMC iterations to be returned. 
+#' @param nburn Number of MCMC burn-in iterations
+#' @param nsim Number of MCMC iterations to be returned.
 #' @param nthin Thinning parameter for the MCMC -- the number of iterations run
 #'   before one is stored.
 #' @param m_mean,m_var Number of trees used to model the mean, variance
 #'   functions.
 #' @param alpha,beta Hyperparameters for the tree splitting prior. The
 #'   probability that a node at depth d splits is given by \eqn{\alpha / (1 + d)
-#'   ^ \beta}. Default values are \eqn{\alpha = 0.95} and \eqn{\beta = 2}. 
+#'   ^ \beta}. Default values are \eqn{\alpha = 0.95} and \eqn{\beta = 2}.
 #' @param lambda,nu Hyperparameters in the prior for sigma.
 #' @param kfac Hyperparameter in the variance term of the prior for the mu.
-#'   Larger values imply larger shrinkage of the fit towards 0. 
-#' @param phi0 
-#' @param variance One of \code{'ux'}, \code{'x'}, or \code{'const'}. If \code{'ux'}, the variance
-#'   term is treated as a function of both the latent u and the observed x,
-#'   which can be helpful for flexible learning in finite sample settings. If
-#'   \code{'x'}, the variance is solely a function of x, allowing for
-#'   heteroscedasticity in the observed covariates. If \code{'const'}, an assumption
-#'   of constant variance is made.
+#'   Larger values imply larger shrinkage of the fit towards 0.
+#' @param phi0 Baseline precision if \code{variance = 'x'} or \code{variance =
+#'   'ux'}.
+#' @param variance One of \code{'ux'}, \code{'x'}, or \code{'const'}. If
+#'   \code{'ux'}, the variance term is treated as a function of both the latent
+#'   u and the observed x, which can be helpful for flexible learning in finite
+#'   sample settings. If \code{'x'}, the variance is solely a function of x,
+#'   allowing for heteroscedasticity in the observed covariates. If
+#'   \code{'const'}, an assumption of constant variance is made.
 #' @param censor A logical vector denoting which values of \code{y}, if any, are
 #'   censored from below. Such observations will be imputed within the sampler.
 #'   Defaults to assuming no observations are censored.
@@ -90,9 +60,9 @@
 #'   used for prediction after model fitting.
 #' @param mean_cuts,prec_cuts Optional. Cut points to consider when building
 #'   trees to model the mean, variance function, respectively. If supplied, a
-#'   list of length \code{ncol(x)} containing the split points associated with each
-#'   covariate. Otherwise, an intelligent choice based off observed covariate
-#'   values will be made.
+#'   list of length \code{ncol(x)} containing the split points associated with
+#'   each covariate. Otherwise, an intelligent choice based off observed
+#'   covariate values will be made.
 #'
 #' @return An object of class `drbart`, containing: 
 #' @export
