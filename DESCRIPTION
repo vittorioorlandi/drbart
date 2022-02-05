@@ -1,0 +1,22 @@
+Package: drbart
+Type: Package
+Title: Density Regression with Bayesian Additive Regression Trees
+Version: 0.0.0.9000
+Date: 2022-02-04
+Authors@R: 
+  c(person(given = 'Vittorio', 
+           family = 'Orlandi',
+           role = c('aut', 'cre'),
+           email = 'vdo@duke.edu'),
+    person(given = 'Jared',
+           family = 'Murray',
+           role = 'aut',
+           email = 'jared.murray@mccombs.utexas.edu'))
+Maintainer: Vittorio Orlandi <vdo@duke.edu>
+Description: An implementation of the DR-BART algorithm for flexible and 
+  accurate density regression using Bayesian Additive Regression Trees.
+License: GPL (>= 2)
+Imports: 
+    Rcpp
+LinkingTo: Rcpp
+RoxygenNote: 7.1.1
