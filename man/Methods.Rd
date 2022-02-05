@@ -23,7 +23,8 @@
   quantiles = c(0.025, 0.5, 0.975),
   CI = FALSE,
   alpha = 0.05,
-  legend_position
+  legend_position,
+  ...
 )
 }
 \arguments{

@@ -148,7 +148,7 @@ predict.drbart <- function(object, xpred, ygrid,
 plot.drbart <- function(x, xpred, ygrid, 
                         type = c('density', 'distribution', 'quantiles', 'mean'), 
                         quantiles = c(0.025, 0.5, 0.975),
-                        CI = FALSE, alpha = 0.05, legend_position) {
+                        CI = FALSE, alpha = 0.05, legend_position, ...) {
   
   type <- match.arg(type)
   
