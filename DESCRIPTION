@@ -17,6 +17,7 @@ Description: An implementation of the DR-BART algorithm for flexible and
   accurate density regression using Bayesian Additive Regression Trees.
 License: GPL (>= 2)
 Imports: 
-    Rcpp
+    Rcpp,
+    RColorBrewer
 LinkingTo: Rcpp
 RoxygenNote: 7.1.1
