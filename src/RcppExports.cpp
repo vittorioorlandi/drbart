@@ -36,62 +36,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// dmixnorm0
-NumericVector dmixnorm0(NumericVector& x, NumericVector& logprob, NumericVector& mu, double& sd);
-RcppExport SEXP _drbart_dmixnorm0(SEXP xSEXP, SEXP logprobSEXP, SEXP muSEXP, SEXP sdSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type logprob(logprobSEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< double& >::type sd(sdSEXP);
-    rcpp_result_gen = Rcpp::wrap(dmixnorm0(x, logprob, mu, sd));
-    return rcpp_result_gen;
-END_RCPP
-}
-// pmixnorm0
-NumericVector pmixnorm0(NumericVector& x, NumericVector& logprob, NumericVector& mu, double& sd);
-RcppExport SEXP _drbart_pmixnorm0(SEXP xSEXP, SEXP logprobSEXP, SEXP muSEXP, SEXP sdSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type logprob(logprobSEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< double& >::type sd(sdSEXP);
-    rcpp_result_gen = Rcpp::wrap(pmixnorm0(x, logprob, mu, sd));
-    return rcpp_result_gen;
-END_RCPP
-}
-// dmixnorm
-NumericVector dmixnorm(NumericVector& x, NumericVector& logprob, NumericVector& mu, NumericVector& sd);
-RcppExport SEXP _drbart_dmixnorm(SEXP xSEXP, SEXP logprobSEXP, SEXP muSEXP, SEXP sdSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type logprob(logprobSEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type sd(sdSEXP);
-    rcpp_result_gen = Rcpp::wrap(dmixnorm(x, logprob, mu, sd));
-    return rcpp_result_gen;
-END_RCPP
-}
-// pmixnorm
-NumericVector pmixnorm(NumericVector& x, NumericVector& logprob, NumericVector& mu, NumericVector& sd);
-RcppExport SEXP _drbart_pmixnorm(SEXP xSEXP, SEXP logprobSEXP, SEXP muSEXP, SEXP sdSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type logprob(logprobSEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type sd(sdSEXP);
-    rcpp_result_gen = Rcpp::wrap(pmixnorm(x, logprob, mu, sd));
-    return rcpp_result_gen;
-END_RCPP
-}
 // dmixnorm0_post
 NumericMatrix dmixnorm0_post(NumericVector x, List mus, NumericVector sd, List logprobs);
 RcppExport SEXP _drbart_dmixnorm0_post(SEXP xSEXP, SEXP musSEXP, SEXP sdSEXP, SEXP logprobsSEXP) {
@@ -211,10 +155,6 @@ RcppExport SEXP _rcpp_module_boot_TreeSamples();
 static const R_CallMethodDef CallEntries[] = {
     {"_drbart_do_rgig1", (DL_FUNC) &_drbart_do_rgig1, 3},
     {"_drbart_gig_norm", (DL_FUNC) &_drbart_gig_norm, 3},
-    {"_drbart_dmixnorm0", (DL_FUNC) &_drbart_dmixnorm0, 4},
-    {"_drbart_pmixnorm0", (DL_FUNC) &_drbart_pmixnorm0, 4},
-    {"_drbart_dmixnorm", (DL_FUNC) &_drbart_dmixnorm, 4},
-    {"_drbart_pmixnorm", (DL_FUNC) &_drbart_pmixnorm, 4},
     {"_drbart_dmixnorm0_post", (DL_FUNC) &_drbart_dmixnorm0_post, 4},
     {"_drbart_pmixnorm0_post", (DL_FUNC) &_drbart_pmixnorm0_post, 4},
     {"_drbart_dmixnorm_post", (DL_FUNC) &_drbart_dmixnorm_post, 4},

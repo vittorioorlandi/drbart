@@ -14,8 +14,6 @@ double logsumexp(T &x) {
   return(m + log(s));
 }
 
-
-//[[Rcpp::export]]
 NumericVector dmixnorm0(NumericVector& x, NumericVector& logprob, 
                         NumericVector& mu, double& sd) {
   NumericVector out(x.size());
@@ -29,7 +27,6 @@ NumericVector dmixnorm0(NumericVector& x, NumericVector& logprob,
   return(out);
 }
 
-//[[Rcpp::export]]
 NumericVector pmixnorm0(NumericVector& x, NumericVector& logprob, 
                         NumericVector& mu, double& sd) {
   NumericVector out(x.size());
@@ -43,7 +40,6 @@ NumericVector pmixnorm0(NumericVector& x, NumericVector& logprob,
   return(out);
 }
 
-//[[Rcpp::export]]
 NumericVector dmixnorm(NumericVector& x, NumericVector& logprob, 
                        NumericVector& mu, NumericVector& sd) {
   NumericVector out(x.size());
@@ -57,7 +53,6 @@ NumericVector dmixnorm(NumericVector& x, NumericVector& logprob,
   return(out);
 }
 
-//[[Rcpp::export]]
 NumericVector pmixnorm(NumericVector& x, NumericVector& logprob, 
                        NumericVector& mu, NumericVector& sd) {
   NumericVector out(x.size());

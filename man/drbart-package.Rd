@@ -1,34 +1,26 @@
 \name{drbart-package}
 \alias{drbart-package}
-\alias{drbart}
 \docType{package}
 \title{
-  A short title line describing what the package does
+  An implemention of Density Regression with Bayesian Additive Regression Trees (DR-BART)
 }
 \description{
-  A more detailed description of what the package does. A length
-  of about one to five lines is recommended.
+  This package implements the DR-BART algorithm for flexible and accurate density regression using Bayesian Additive Regression Trees.
 }
 \details{
-  This section should provide a more detailed overview of how to use the
-  package, including the most important functions.
+  \code{\link{drbart}} is the workhorse of the package; it fits a density regression model to supplied data and returns an object of class \code{drbart}. To estimate and visualize (functionals of) conditional densities, \code{predict} and \code{plot} methods are provided for this class. 
 }
 \author{
-Your Name, email optional.
+Vittorio Orlandi
+Jared Murray
 
-Maintainer: Your Name <your@email.com>
+Maintainer: Vittorio Orlandi <vdo@duke.edu>
 }
 \references{
-  This optional section can contain literature or other references for
-  background information.
+  Orlandi, Murray, Linero, and Volfovsky (2021) \emph{Density Regression with Bayesian Additive Regression Trees}.
+  \url{https://arxiv.org/abs/2112.12259}.
 }
 \keyword{ package }
 \seealso{
-  Optional links to other man pages
-}
-\examples{
-  \dontrun{
-     ## Optional simple examples of the most important functions
-     ## These can be in \dontrun{} and \donttest{} blocks.   
-  }
+  \code{\link{drbart}}
 }

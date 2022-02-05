@@ -9,22 +9,6 @@ gig_norm <- function(lambda, chi, psi) {
     .Call(`_drbart_gig_norm`, lambda, chi, psi)
 }
 
-dmixnorm0 <- function(x, logprob, mu, sd) {
-    .Call(`_drbart_dmixnorm0`, x, logprob, mu, sd)
-}
-
-pmixnorm0 <- function(x, logprob, mu, sd) {
-    .Call(`_drbart_pmixnorm0`, x, logprob, mu, sd)
-}
-
-dmixnorm <- function(x, logprob, mu, sd) {
-    .Call(`_drbart_dmixnorm`, x, logprob, mu, sd)
-}
-
-pmixnorm <- function(x, logprob, mu, sd) {
-    .Call(`_drbart_pmixnorm`, x, logprob, mu, sd)
-}
-
 dmixnorm0_post <- function(x, mus, sd, logprobs) {
     .Call(`_drbart_dmixnorm0_post`, x, mus, sd, logprobs)
 }

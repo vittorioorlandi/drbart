@@ -4,7 +4,7 @@
 #include "tree.h"
 
 using std::string;
-using std::cout;
+using Rcpp::Rcout;
 using std::endl;
 
 //--------------------------------------------------
@@ -178,11 +178,11 @@ bool tree::birth(size_t nid,size_t v, size_t c, double ml, double mr)
 {
    tree_p np = getptr(nid);
    if(np==0) {
-      cout << "error in birth: bottom node not found\n";
+      Rcout << "error in birth: bottom node not found\n";
       return false; //did not find note with that nid
    }
    if(np->l) {
-      cout << "error in birth: found node has children\n";
+      Rcout << "error in birth: found node has children\n";
       return false; //node is not a bottom node
    }
 
@@ -217,7 +217,7 @@ bool tree::death(size_t nid, double mu)
 {
    tree_p nb = getptr(nid);
    if(nb==0) {
-      cout << "error in death, nid invalid\n";
+      Rcout << "error in death, nid invalid\n";
       return false;
    }
    if(nb->isnog()) {
@@ -230,7 +230,7 @@ bool tree::death(size_t nid, double mu)
       nb->mu=mu;
       return true;
    } else {
-      cout << "error in death, node is not a nog node\n";
+      Rcout << "error in death, node is not a nog node\n";
       return false;
    }
 }
@@ -275,15 +275,15 @@ void tree::pr(bool pc) const
    string pad(2*d,' ');
    string sp(", ");
    if(pc && (ntype()=='t')) 
-      cout << "tree size: " << treesize() << endl;
-   //cout << pad << "(id,parent): " << id << sp << pid;
-   cout << pad << "id: " << id;
-   cout << sp << "(v,c): " << v << sp << c;
-   cout << sp << "mu: " << mu; 
-   cout << sp << "type: " << ntype();
-   cout << sp << "depth: " << depth();
-   //cout << sp << "pointer: " << this << endl;
-   cout << endl;
+      Rcout << "tree size: " << treesize() << endl;
+   //Rcout << pad << "(id,parent): " << id << sp << pid;
+   Rcout << pad << "id: " << id;
+   Rcout << sp << "(v,c): " << v << sp << c;
+   Rcout << sp << "mu: " << mu; 
+   Rcout << sp << "type: " << ntype();
+   Rcout << sp << "depth: " << depth();
+   //Rcout << sp << "pointer: " << this << endl;
+   Rcout << endl;
 
    if(pc) {
       if(l) {
@@ -301,7 +301,7 @@ void tree::cp(tree_p n, tree_cp o)
 //recursion down
 {
    if(n->l) {
-      cout << "cp:error node has children\n";
+      Rcout << "cp:error node has children\n";
       return;
    }
 
@@ -368,7 +368,7 @@ std::istream& operator>>(std::istream& is, tree& t)
    //read number of nodes----------
    is >> nn;
    if(!is) {
-      //cout << ">> error: unable to read number of nodes" << endl;
+      //Rcout << ">> error: unable to read number of nodes" << endl;
       return is;
    }
 
@@ -377,7 +377,7 @@ std::istream& operator>>(std::istream& is, tree& t)
    for(size_t i=0;i!=nn;i++) {
       is >> nv[i].id >> nv[i].v >> nv[i].c >> nv[i].m;
       if(!is) {
-         //cout << ">> error: unable to read node info, on node  " << i+1 << endl;
+         //Rcout << ">> error: unable to read node info, on node  " << i+1 << endl;
          return is;
       }
    }
@@ -425,7 +425,7 @@ std::istream& operator>>(std::istream& is, xinfo& xi)
 
 	is >> xin;
 	if(!is) {
-		//cout << ">> error: unable to read size of xinfo" << endl;
+		//Rcout << ">> error: unable to read size of xinfo" << endl;
 		return is;
 	}
 

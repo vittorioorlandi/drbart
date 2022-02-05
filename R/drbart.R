@@ -66,11 +66,15 @@
 #'   covariate values will be made.
 #'
 #' @return An object of class `drbart`, containing: 
+#' 
+#' @importFrom utils flush.console
+#' @importFrom graphics legend lines points
+#' @importFrom stats approxfun integrate quantile runif
+#' @importFrom methods new
 #' @export
 #' 
 #' @seealso \code{\link{predict.drbart}}, \code{\link{plot.drbart}}.
 #'
-#' @examples
 drbart <- function(y, x, 
                    nburn = 5000, nsim = 5000,  nthin = 1, 
                    printevery = round((nburn + nsim) / 20),

@@ -36,7 +36,7 @@ void grm(tree& tr, xinfo& xi, std::ostream& os)
 {
 	size_t p = xi.size();
 	if(p!=2) {
-		cout << "error in grm, p !=2\n";
+		Rcout << "error in grm, p !=2\n";
 		return;
 	}
 	size_t n1 = xi[0].size();
@@ -964,12 +964,12 @@ void MPImasterdrmu(tree& t, xinfo& xi, pinfo& pi, RNG& gen, size_t numslaves)
 //write cutpoint information to screen
 void prxi(xinfo& xi)
 {
-	cout << "xinfo: \n";
+	Rcout << "xinfo: \n";
 	for(size_t v=0;v!=xi.size();v++) {
-		cout << "v: " << v << endl;
-		for(size_t j=0;j!=xi[v].size();j++) cout << "j,xi[v][j]: " << j << ", " << xi[v][j] << endl;
+		Rcout << "v: " << v << endl;
+		for(size_t j=0;j!=xi[v].size();j++) Rcout << "j,xi[v][j]: " << j << ", " << xi[v][j] << endl;
 	}
-	cout << "\n\n";
+	Rcout << "\n\n";
 }
 //--------------------------------------------------
 //make xinfo = cutpoints
