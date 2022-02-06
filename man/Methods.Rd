@@ -3,6 +3,7 @@
 \name{Methods}
 \alias{Methods}
 \alias{predict.drbart}
+\alias{plot.predict.drbart}
 \alias{plot.drbart}
 \title{Posterior Predictive Quantities from DR-BART}
 \usage{
@@ -12,6 +13,18 @@
   ygrid,
   type = c("density", "distribution", "quantiles", "mean"),
   quantiles = c(0.025, 0.5, 0.975),
+  ...
+)
+
+\method{plot}{predict.drbart}(
+  x,
+  xpred,
+  ygrid,
+  type = c("density", "distribution", "quantiles", "mean"),
+  quantiles = c(0.025, 0.5, 0.975),
+  CI = FALSE,
+  alpha = 0.05,
+  legend_position,
   ...
 )
 
@@ -28,8 +41,9 @@
 )
 }
 \arguments{
-\item{object, x}{An object of class \code{drbart}, returned by a call to
-\code{\link{drbart}}.}
+\item{object, x}{If calling the \code{predict} or \code{plot} methods, an
+object of class \code{drbart}; else, if calling the \code{predict.plot}
+method, an object of class \code{predict.drbart} .}
 
 \item{xpred}{A matrix of points describing which conditional densities /
 distributions should be estimated. Rows correspond to different conditional
@@ -58,24 +72,29 @@ densities that should be estimated.}
 \code{\link{legend}} or \code{'none'} if the legend should be omitted.}
 }
 \value{
-If predicting, an array containing posterior draws of the conditional
-  densities, conditional distributions, conditional quantiles, or conditional
-  means, depending on the value of `type`. If plotting, the original `drbart`
-  object is invisibly returned.
+An object of class \code{predict.drbart}, which is an array
+  containing posterior draws of the conditional densities, conditional
+  distributions, conditional quantiles, or conditional means, depending on
+  the value of `type`. If plotting, the object is invisibly returned.
 }
 \description{
 Compute and plot conditional density functions, distribution functions,
 quantiles, and means.
 }
 \details{
-\code{predict.drbart} returns posterior predictive draws of functionals of the
-conditional densities and is called by \code{plot.drbart} to generate appropriate
-plots. The functional is determined by the value of \code{type}; either entire
-density or distribution functions, selected quantiles, or means may be
-estimated. Because quantiles and means are derived from the relevant
+\code{predict.drbart} returns posterior predictive draws of functionals of
+the conditional densities and is called by \code{plot.drbart} to generate
+appropriate plots. The functional is determined by the value of \code{type};
+either entire density or distribution functions, selected quantiles, or means
+may be estimated. Because quantiles and means are derived from the relevant
 densities themselves, in all cases, prediction is a relatively time intensive
 procedure, dependent on the number of posterior samples and on the size of
-\code{ygrid}. Note also that estimated quantities will be inaccurate should
-\code{ygrid} not fully capture the high density regions of the conditional
-densities.
+\code{ygrid}. For this reason, the \code{predict} method returns an object of
+class \code{predict.drbart}, which has its own associated method:
+\code{plot.predict.drbart}. In this way, multiple plots highlighting
+different aspects of the data can be generated without the need to repeatedly
+call \code{predict.drbart}.
+
+Note: estimated quantities will be inaccurate if \code{ygrid} does not fully
+capture the high density regions of the conditional densities.
 }
