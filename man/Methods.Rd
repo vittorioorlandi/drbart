@@ -16,17 +16,7 @@
   ...
 )
 
-\method{plot}{predict.drbart}(
-  x,
-  xpred,
-  ygrid,
-  type = c("density", "distribution", "quantiles", "mean"),
-  quantiles = c(0.025, 0.5, 0.975),
-  CI = FALSE,
-  alpha = 0.05,
-  legend_position,
-  ...
-)
+\method{plot}{predict.drbart}(x, CI = FALSE, alpha = 0.05, legend_position, ...)
 
 \method{plot}{drbart}(
   x,
@@ -52,21 +42,23 @@ densities and columns to different covariates.}
 \item{ygrid}{A numeric vector of y values at which the conditional density /
 distribution should be evaluated.}
 
-\item{type}{Type of predictions to be returned. If \code{'density'}, returns an
-estimate of the conditional density functions (pdfs) evaluated at points
-in \code{ygrid}. If \code{'distribution'}, returns an estimate of the conditional
-distribution functions (cdfs), evaluated at points in \code{'ygrid'}. If
-\code{'quantiles'}, returns the quantiles of the conditional density specified
-by \code{quantiles}. If \code{mean}, returns the conditional mean.}
+\item{type}{Type of predictions to be returned. If \code{'density'}, returns
+an estimate of the conditional density functions (pdfs) evaluated at points
+in \code{ygrid}. If \code{'distribution'}, returns an estimate of the
+conditional distribution functions (cdfs), evaluated at points in
+\code{'ygrid'}. If \code{'quantiles'}, returns the quantiles of the
+conditional density specified by \code{quantiles}. If \code{mean}, returns
+the conditional mean.}
 
-\item{quantiles}{If \code{type = 'quantiles'}, the quantiles of the conditional
-densities that should be estimated.}
+\item{quantiles}{If \code{type = 'quantiles'}, the quantiles of the
+conditional densities that should be estimated.}
 
 \item{...}{Ignored.}
 
 \item{CI}{Whether credible intervals should be plotted.}
 
-\item{alpha}{If \code{CI = TRUE}, plots \code{100(1 - alpha)\%} credible intervals.}
+\item{alpha}{If \code{CI = TRUE}, plots \code{100(1 - alpha)\%} credible
+intervals.}
 
 \item{legend_position}{A legend position keyword as accepted by
 \code{\link{legend}} or \code{'none'} if the legend should be omitted.}
@@ -91,9 +83,8 @@ densities themselves, in all cases, prediction is a relatively time intensive
 procedure, dependent on the number of posterior samples and on the size of
 \code{ygrid}. For this reason, the \code{predict} method returns an object of
 class \code{predict.drbart}, which has its own associated method:
-\code{plot.predict.drbart}. In this way, multiple plots highlighting
-different aspects of the data can be generated without the need to repeatedly
-call \code{predict.drbart}.
+\code{plot.predict.drbart}. In this way, plots can be re-generated without
+the need to repeatedly call \code{predict.drbart}.
 
 Note: estimated quantities will be inaccurate if \code{ygrid} does not fully
 capture the high density regions of the conditional densities.
