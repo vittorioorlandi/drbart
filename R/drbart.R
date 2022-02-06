@@ -68,7 +68,7 @@
 #' @return An object of class `drbart`, containing:
 #'
 #' @importFrom utils flush.console
-#' @importFrom graphics legend lines points
+#' @importFrom graphics legend lines points arrows
 #' @importFrom stats approxfun integrate quantile runif
 #' @importFrom methods new
 #' @export
