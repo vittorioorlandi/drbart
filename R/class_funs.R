@@ -283,7 +283,3 @@ plot.drbart <-
 
   plot(all_preds, CI, alpha, legend_position, ...)
 }
-
-# if (object$variance == 'const') {
-#   hist(object$fit$sigma ^ 2, xlab = expression(sigma ^ 2), main = '')
-# }

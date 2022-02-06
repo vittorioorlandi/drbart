@@ -21,12 +21,6 @@ check_args <- function(x, y,
   stopifnot(0 < nu)
   stopifnot(0 < kfac)
   stopifnot(length(censor) == length(y))
-
-  mean_file_name <- basename(mean_file)
-  mean_file_dir <- dirname(mean_file)
-
-  prec_file_name <- basename(prec_file)
-  prec_file_dir <- dirname(prec_file)
   return(x)
 }
 
