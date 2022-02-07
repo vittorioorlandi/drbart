@@ -68,6 +68,10 @@ predict.drbart <- function(object, xpred, ygrid,
     ts_prec <- TreeSamples$new()
     ts_prec$load(prec_file)
   }
+  
+  n_unique <- apply(xpred, 2, function(col) length(unique(col)))
+  non_const <- which(n_unique > 1)
+  unique_vals <- xpred[, non_const]
 
   fit <- object$fit
 
@@ -78,16 +82,17 @@ predict.drbart <- function(object, xpred, ygrid,
 
   if (type == 'mean') {
     preds <- array(dim = c(nrow(xpred), 1, nsim),
-                   dimnames = list(x = xpred, NULL, sample = seq_len(nsim)))
+                   dimnames = list(x = unique_vals, NULL, 
+                                   sample = seq_len(nsim)))
   }
   else if (type == 'quantiles') {
     preds <- array(dim = c(nrow(xpred), length(quantiles), nsim),
-                   dimnames = list(x = xpred, quantile = quantiles,
+                   dimnames = list(x = unique_vals, quantile = quantiles,
                                    sample = seq_len(nsim)))
   }
   else {
     preds <- array(dim = c(nrow(xpred), length(ygrid), nsim),
-                   dimnames = list(x = xpred,
+                   dimnames = list(x = unique_vals,
                                    y = ygrid, sample = seq_len(nsim)))
   }
 
