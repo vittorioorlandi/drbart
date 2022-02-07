@@ -162,7 +162,7 @@ predict.drbart <- function(object, xpred, ygrid,
 #' @rdname Methods
 #' @export
 plot.predict.drbart <-
-  function(x, CI = FALSE, alpha = 0.05, legend_position, ...) {
+  function(x, CI = FALSE, alpha = 0.05, legend_position = 'topleft', ...) {
   xpred <- x$xpred
   ygrid <- x$ygrid
   quantiles <- x$quantiles
@@ -243,10 +243,6 @@ plot.predict.drbart <-
     }
   }
 
-  if (missing(legend_position)) {
-    legend_position <- 'topleft'
-  }
-
   if (type == 'mean' | legend_position == 'none' | n_colors > 9) {
     return(invisible(x))
   }
@@ -272,7 +268,7 @@ plot.drbart <-
   function(x, xpred, ygrid,
            type = c('density', 'distribution', 'quantiles', 'mean'),
            quantiles = c(0.025, 0.5, 0.975),
-           CI = FALSE, alpha = 0.05, legend_position, ...) {
+           CI = FALSE, alpha = 0.05, legend_position = 'topleft', ...) {
 
   type <- match.arg(type)
 
