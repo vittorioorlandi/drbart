@@ -15,7 +15,13 @@ Rcpp::loadModule("TreeSamples", TRUE)
 #' \code{ygrid}. For this reason, the \code{predict} method returns an object of
 #' class \code{predict.drbart}, which has its own associated method:
 #' \code{plot.predict.drbart}. In this way, plots can be re-generated without
-#' the need to repeatedly call \code{predict.drbart}.
+#' the need to repeatedly call \code{predict.drbart}. If multiple cores are
+#' available, however, the predictions can be parallelized by passing a number
+#' of cores to parallelize across via \code{n_cores}. Doing so requires the
+#' \code{doParallel} package and if \code{n_cores} is supplied, a parallel
+#' backend is registered via \code{doParallel::registerDoParallel()} and used
+#' for the parallelization. \emph{This functionality is currently untested on
+#' Windows.}
 #'
 #' Note: estimated quantities will be inaccurate if \code{ygrid} does not fully
 #' capture the high density regions of the conditional densities.
@@ -37,6 +43,9 @@ Rcpp::loadModule("TreeSamples", TRUE)
 #'   the conditional mean.
 #' @param quantiles If \code{type = 'quantiles'}, the quantiles of the
 #'   conditional densities that should be estimated.
+#' @param n_cores Number of cores to parallelize the predictions of different
+#'   conditional distributions across. If not supplied, predictions are run
+#'   serially.
 #' @param ... Ignored.
 #' @name Methods
 #' @return An object of class \code{predict.drbart}, which is an array
@@ -49,130 +58,68 @@ predict.drbart <- function(object, xpred, ygrid,
                                     'quantiles', 'mean'),
                            quantiles = c(0.025, 0.5, 0.975), n_cores, ...) {
 
-
-  if (!missing(n_cores)) {
-    if (!requireNamespace("doParallel", quietly = TRUE)) {
-      stop("Package `doParallel` needed to predict in parallel.",
-           " Please install it or do not supply a value for `n_cores`",
-           call. = FALSE)
-    }
-    n_cores_detected <- detectCores(all.tests = TRUE)  
-    
-    if (n_cores > n_cores_detected) {
-      warning(paste0('Requested ', n_cores, ' cores, but only detected ', 
-                     n_cores_detected))
-    }
-  }
-
-  type <- match.arg(type)
-
-  mean_file <- object$mean_file
-  stopifnot(file.exists(mean_file))
-
-  variance <- object$variance
-  if (variance != 'const') {
-    prec_file <- object$prec_file
-    stopifnot(file.exists(prec_file))
-  }
-
+  tmp <- preprocess_predict(object, xpred, ygrid, type, quantiles, n_cores)
+  type <- tmp$type
+  variance <- tmp$variance
+  mean_file <- tmp$mean_file
+  prec_file <- tmp$prec_file
+  post_fun <- tmp$post_fun
+  preds <- tmp$preds
+  
+  
+  # Read in trees
   ts_mean <- TreeSamples$new()
   ts_mean$load(mean_file)
-
+  
   if (variance != 'const') {
     ts_prec <- TreeSamples$new()
     ts_prec$load(prec_file)
   }
 
   fit <- object$fit
-
   logprobs <- lapply(fit$ucuts, function(u) log(diff(c(0, u, 1))))
   mids <- lapply(fit$ucuts, function(u) c(0, u) + diff(c(0, u, 1)) / 2)
 
-  nsim <- length(fit$ucuts)
-
-  if (type == 'mean') {
-    preds <- array(dim = c(nrow(xpred), 1, nsim),
-                   dimnames = list(x = xpred, NULL, sample = seq_len(nsim)))
-  }
-  else if (type == 'quantiles') {
-    preds <- array(dim = c(nrow(xpred), length(quantiles), nsim),
-                   dimnames = list(x = xpred, quantile = quantiles,
-                                   sample = seq_len(nsim)))
+  if (!missing(n_cores)) {
+    preds <- 
+      predict_parallel(xpred, mids, fit, ts_mean, ts_prec, type, variance, quantiles, ygrid, logprobs, post_fun)
   }
   else {
-    preds <- array(dim = c(nrow(xpred), length(ygrid), nsim),
-                   dimnames = list(x = xpred,
-                                   y = ygrid, sample = seq_len(nsim)))
+    preds <- 
+      predict_serial(xpred, mids, fit, ts_mean, ts_prec, type, variance, quantiles, ygrid, preds, logprobs, post_fun)
+  }
+  
+  if (type == 'mean') {
+    preds <- apply(preds, 2:3, function(all_samples) {
+      apply(all_samples, 2, function(sample) {
+        get_mean_from_pdf(ygrid, sample)
+      })
+    })
+    dimnames(preds) <- list(x = xpred, NULL, sample = seq_len(dim(preds)[3]))
+  }
+  else if (type == 'quantiles') {
+    preds <- apply(preds, 2:3, function(all_samples) {
+      apply(all_samples, 2, function(sample) {
+        get_q_from_cdf(quantiles, ygrid, sample)
+      })
+    })
+    
+    dimnames(preds) <- 
+      list(x = xpred, quantile = quantiles, sample = seq_len(dim(preds)[3]))
+  }
+  else {
+    dimnames(preds) <- 
+      list(x = xpred, y = ygrid, sample = seq_len(dim(preds)[3]))
   }
 
-  preds <- 
-    predict_parallel(xpred, mids, fit, ts_mean, ts_prec, type, variance, quantiles, ygrid, preds)
-  # for (j in seq_len(nrow(xpred))) {
-  #   message(paste0('Predicting conditional density ', j, ' of ', nrow(xpred),
-  #                  ' (', round(100 * (j - 1) / nrow(xpred)), '%)', '\r'),
-  #           appendLF = FALSE)
-  #   flush.console()
-  # 
-  # 
-  #   des <- lapply(mids, function(m) {
-  #     do.call(data.frame, c(list(m), as.list(xpred[j, ])))
-  #     })
-  #   mu <- lapply(seq_along(fit$ucuts), function(i) {
-  #     c(ts_mean$predict_i(t(des[[i]]), i - 1))
-  #   })
-  # 
-  #   if (variance == 'const' | variance == 'x') {
-  #     if (type == 'quantiles' | type == 'distribution') {
-  #       post_fun <- pmixnorm0_post
-  #     }
-  #     else {
-  #       post_fun <- dmixnorm0_post
-  #     }
-  #   }
-  #   else {
-  #     if (type == 'quantiles' | type == 'distribution') {
-  #       post_fun <- pmixnorm_post
-  #     }
-  #     else {
-  #       post_fun <- dmixnorm_post
-  #     }
-  #   }
-  # 
-  #   if (variance == 'const') {
-  #     sigma <- fit$sigma
-  #   }
-  #   else if (variance == 'x') {
-  #     sigma <- 1 / sqrt(fit$phistar * ts_prec$predict_prec(matrix(xpred[j, ])))
-  #   }
-  #   else {
-  #     phi <- lapply(seq_along(fit$ucuts), function(i) {
-  #       fit$phistar[i] * c(ts_prec$predict_prec_i(t(des[[i]]), i - 1))
-  #     })
-  #     sigma <- lapply(phi, function(x) 1 / sqrt(x))
-  #   }
-  #   post <- exp(post_fun(ygrid, mu, sigma, logprobs))
-  # 
-  #   if (type == 'mean') {
-  #     preds[j, 1, ] <-
-  #       apply(post, 2, function(pdf) get_mean_from_pdf(ygrid, pdf))
-  #   }
-  #   else if (type == 'quantiles') {
-  #     preds[j, , ] <-
-  #       apply(post, 2, function(cdf) get_q_from_cdf(quantiles, ygrid, cdf))
-  #   }
-  #   else {
-  #     preds[j, , ] <- post
-  #   }
-  # }
+  out <- list(preds = preds,
+              type = type,
+              xpred = xpred,
+              quantiles = quantiles,
+              ygrid = ygrid)
 
-  preds <- list(preds = preds,
-                type = type,
-                xpred = xpred,
-                quantiles = quantiles,
-                ygrid = ygrid)
-
-  class(preds) <- 'predict.drbart'
-  return(preds)
+  class(out) <- 'predict.drbart'
+  return(out)
 }
 
 #' @rdname Methods
