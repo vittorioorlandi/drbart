@@ -13,6 +13,7 @@
   ygrid,
   type = c("density", "distribution", "quantiles", "mean"),
   quantiles = c(0.025, 0.5, 0.975),
+  n_cores,
   ...
 )
 
@@ -53,6 +54,10 @@ the conditional mean.}
 \item{quantiles}{If \code{type = 'quantiles'}, the quantiles of the
 conditional densities that should be estimated.}
 
+\item{n_cores}{Number of cores to parallelize the predictions of different
+conditional distributions across. If not supplied, predictions are run
+serially.}
+
 \item{...}{Ignored.}
 
 \item{CI}{Whether credible intervals should be plotted.}
@@ -87,7 +92,13 @@ procedure, dependent on the number of posterior samples and on the size of
 \code{ygrid}. For this reason, the \code{predict} method returns an object of
 class \code{predict.drbart}, which has its own associated method:
 \code{plot.predict.drbart}. In this way, plots can be re-generated without
-the need to repeatedly call \code{predict.drbart}.
+the need to repeatedly call \code{predict.drbart}. If multiple cores are
+available, however, the predictions can be parallelized by passing a number
+of cores to parallelize across via \code{n_cores}. Doing so requires the
+\code{doParallel} package and if \code{n_cores} is supplied, a parallel
+backend is registered via \code{doParallel::registerDoParallel()} and used
+for the parallelization. \emph{This functionality is currently untested on
+Windows.}
 
 Note: estimated quantities will be inaccurate if \code{ygrid} does not fully
 capture the high density regions of the conditional densities.

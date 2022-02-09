@@ -138,3 +138,69 @@ preprocess_plot_args <- function(xpred, ygrid, type, quantiles, CI, alpha,
   return(list(colors = colors, estimand_size = estimand_size,
               vals = vals, xpred = xpred))
 }
+
+preprocess_predict <- function(object, xpred, ygrid, type, quantiles, n_cores) {
+  if (!missing(n_cores)) {
+    if (!requireNamespace("doParallel", quietly = TRUE)) {
+      stop("Package `doParallel` needed to predict in parallel.",
+           " Please install it or do not supply a value for `n_cores`",
+           call. = FALSE)
+    }
+    n_cores_detected <- parallel::detectCores(all.tests = TRUE)  
+    
+    if (n_cores > n_cores_detected) {
+      warning(paste0('Requested ', n_cores, ' cores, but only detected ', 
+                     n_cores_detected))
+    }
+    
+    doParallel::registerDoParallel(cores = n_cores_detected)
+  }
+  
+  type <- match.arg(type, c('density', 'distribution', 'quantiles', 'mean'))
+  
+  mean_file <- object$mean_file
+  stopifnot(file.exists(mean_file))
+  
+  variance <- object$variance
+  
+  if (variance != 'const') {
+    prec_file <- object$prec_file
+    stopifnot(file.exists(prec_file))
+  }
+  
+  if (variance == 'const' | variance == 'x') {
+    if (type == 'quantiles' | type == 'distribution') {
+      post_fun <- pmixnorm0_post
+    }
+    else {
+      post_fun <- dmixnorm0_post
+    }
+  }
+  else {
+    if (type == 'quantiles' | type == 'distribution') {
+      post_fun <- pmixnorm_post
+    }
+    else {
+      post_fun <- dmixnorm_post
+    }
+  }
+  
+  nsim <- length(object$fit$ucuts)
+  
+  if (type == 'mean') {
+    preds <- array(dim = c(nrow(xpred), 1, nsim))
+  }
+  else if (type == 'quantiles') {
+    preds <- array(dim = c(nrow(xpred), length(quantiles), nsim))
+  }
+  else {
+    preds <- array(dim = c(nrow(xpred), length(ygrid), nsim))
+  }
+  
+  return(list(type = type, 
+              variance = variance,
+              mean_file = mean_file, 
+              prec_file = prec_file,
+              post_fun = post_fun, 
+              preds = preds))
+}
