@@ -16,7 +16,7 @@
   ...
 )
 
-\method{plot}{predict.drbart}(x, CI = FALSE, alpha = 0.05, legend_position, ...)
+\method{plot}{predict.drbart}(x, CI = FALSE, alpha = 0.05, legend_position = "topleft", ...)
 
 \method{plot}{drbart}(
   x,
@@ -26,7 +26,7 @@
   quantiles = c(0.025, 0.5, 0.975),
   CI = FALSE,
   alpha = 0.05,
-  legend_position,
+  legend_position = "topleft",
   ...
 )
 }
@@ -64,10 +64,13 @@ intervals.}
 \code{\link{legend}} or \code{'none'} if the legend should be omitted.}
 }
 \value{
-An object of class \code{predict.drbart}, which is an array
-  containing posterior draws of the conditional densities, conditional
-  distributions, conditional quantiles, or conditional means, depending on
-  the value of `type`. If plotting, the object is invisibly returned.
+An object of class \code{predict.drbart}, which is a list with five
+  elements. The first, \code{preds}, is an array containing posterior draws
+  of the conditional densities, conditional distributions, conditional
+  quantiles, or conditional means, depending on the value of \code{type}. The
+  remaining elements provide information about how \code{predict.drbart} was
+  called and are used by \code{plot.predict.drbart}. If calling \code{plot}
+  methods, this is returned invisibly.
 }
 \description{
 Compute and plot conditional density functions, distribution functions,

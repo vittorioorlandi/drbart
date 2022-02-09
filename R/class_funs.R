@@ -39,10 +39,13 @@ Rcpp::loadModule("TreeSamples", TRUE)
 #'   conditional densities that should be estimated.
 #' @param ... Ignored.
 #' @name Methods
-#' @return An object of class \code{predict.drbart}, which is an array
-#'   containing posterior draws of the conditional densities, conditional
-#'   distributions, conditional quantiles, or conditional means, depending on
-#'   the value of `type`. If plotting, the object is invisibly returned.
+#' @return An object of class \code{predict.drbart}, which is a list with five
+#'   elements. The first, \code{preds}, is an array containing posterior draws
+#'   of the conditional densities, conditional distributions, conditional
+#'   quantiles, or conditional means, depending on the value of \code{type}. The
+#'   remaining elements provide information about how \code{predict.drbart} was
+#'   called and are used by \code{plot.predict.drbart}. If calling \code{plot}
+#'   methods, this is returned invisibly.
 #' @export
 predict.drbart <- function(object, xpred, ygrid,
                            type = c('density', 'distribution',
@@ -282,5 +285,5 @@ plot.drbart <-
 
   all_preds <- predict(x, xpred, ygrid, type, quantiles)
 
-  plot(all_preds, CI, alpha, legend_position, ...)
+  return(plot(all_preds, CI, alpha, legend_position, ...))
 }
