@@ -29,6 +29,14 @@ drbartRcppClean <- function(y_, x_, xpred_, xinfo_list, burn, nd, thin, printeve
     .Call(`_drbart_drbartRcppClean`, y_, x_, xpred_, xinfo_list, burn, nd, thin, printevery, m, alpha, beta, lambda, nu, kfac, trunc_below, treef_name_)
 }
 
+drbart_l <- function(y_, x_, xinfo_list, burn, nd, thin, printevery, m, alpha, beta, lambda, nu, kfac, trunc_below, treef_name_) {
+    .Call(`_drbart_drbart_l`, y_, x_, xinfo_list, burn, nd, thin, printevery, m, alpha, beta, lambda, nu, kfac, trunc_below, treef_name_)
+}
+
+drbartL <- function(y_, x_, xpred_, xinfo_list, burn, nd, thin, printevery, m, alpha, beta, lambda, nu, kfac, trunc_below, treef_name_) {
+    .Call(`_drbart_drbartL`, y_, x_, xpred_, xinfo_list, burn, nd, thin, printevery, m, alpha, beta, lambda, nu, kfac, trunc_below, treef_name_)
+}
+
 drbartRcppHeteroClean <- function(y_, x_, xprec_, xinfo_list, xinfo_prec_list, burn, nd, thin, printevery, m, mprec, alpha, beta, lambda, nu, kfac, phi0, scalemix, trunc_below, treef_name_, treef_prec_name_) {
     .Call(`_drbart_drbartRcppHeteroClean`, y_, x_, xprec_, xinfo_list, xinfo_prec_list, burn, nd, thin, printevery, m, mprec, alpha, beta, lambda, nu, kfac, phi0, scalemix, trunc_below, treef_name_, treef_prec_name_)
 }

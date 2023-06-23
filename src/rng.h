@@ -100,6 +100,7 @@ double rtnormlo0(double lo);
 double rtnormlo1(double mean, double lo);
 double rtnormhi1(double mean, double lo);
 double rtnormlo(double mean, double sd, double lo);
+double rtnormhi(double mean, double sd, double hi); 
   
 #endif // RNG_H
 

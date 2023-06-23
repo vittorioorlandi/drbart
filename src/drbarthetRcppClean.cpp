@@ -225,6 +225,8 @@ List drbartRcppHeteroClean(NumericVector y_,
   //std::vector<double> lik(xiprec[0].size());
   std::vector<tree> using_uprec;
   std::vector<std::vector<double> > ucuts_prec_post(nd);
+
+	NumericMatrix uvals(nd, n); 
   
   ld_bartU slice_density(0.0, 1.0);
   slice_density.xi = xi;
@@ -456,10 +458,16 @@ List drbartRcppHeteroClean(NumericVector y_,
           allfitprec[k] = fprec * fit_i_mult(k, using_uprec, xiprec, diprec);
         }
       }
+			if (i >= burn & i % thin == 0) {
+				uvals((i - burn) / thin, k) = x[jj + k * p];
+			}
     }
     //end dr bart
     
     if (i >= burn & i % thin == 0) {
+// 			for (size_t k = 0; k < n; k++) {
+// 				uvals((i - burn) / thin) = x[jj + k * p];
+//			}
       for (size_t uu = 0; uu < ucutsv.size(); ++uu) {
         ucuts_post[(i - burn) / thin].push_back(xi[jj][ucutsv[uu]]);
       }
@@ -482,5 +490,6 @@ List drbartRcppHeteroClean(NumericVector y_,
   treef.close();
 
   return(List::create(_["phistar"] = ssigma,
-                      _["ucuts"] = ucuts_post));
+                      _["ucuts"] = ucuts_post,
+											_["uvals"] = uvals));
 }

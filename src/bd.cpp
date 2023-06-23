@@ -10,7 +10,6 @@ using std::endl;
 
 /*
 notation: (as in old code): going from state x to state y (eg, incoming tree is x).
-
 note: rather than have x and making a tree y
 we just figure out what we need from x, the drawn bottom node,the drawn (v,c).
 note sure what the right thing to do is.

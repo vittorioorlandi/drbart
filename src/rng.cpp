@@ -32,6 +32,12 @@
     return mean + rtnormlo0(lostar)*sd;
   }
 
-  double rtnormhi1(double mean, double lo) {
-    return -rtnormlo1(-mean, -lo);
+	// TO CHECK
+  double rtnormhi1(double mean, double hi) {
+    return -rtnormlo1(-mean, -hi);
   }
+
+	// TO CHECK
+	double rtnormhi(double mean, double sd, double hi) {
+		return -rtnormlo(-mean, sd, -hi);
+	}

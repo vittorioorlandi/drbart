@@ -86,7 +86,7 @@ predict.drbart <- function(object, xpred, ygrid,
   fit <- object$fit
   logprobs <- lapply(fit$ucuts, function(u) log(diff(c(0, u, 1))))
   mids <- lapply(fit$ucuts, function(u) c(0, u) + diff(c(0, u, 1)) / 2)
-
+  
   if (!missing(n_cores)) {
     preds <- 
       predict_parallel(xpred, mids, fit, ts_mean, ts_prec, type, variance, quantiles, ygrid, logprobs, post_fun)

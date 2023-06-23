@@ -51,4 +51,4 @@ class ld_bartU: public logdensity {
 
 double slice(double x0, logdensity* g, double w=1., double m=INFINITY, 
              double lower=-INFINITY, double upper=INFINITY);
-#endif slice_h
+#endif

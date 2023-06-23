@@ -1,15 +1,21 @@
 #include "slice.h"
 
+// typically called with w = 1, m = INFINITY, lower = 0, upper = 1
 double slice(double x0, logdensity* g, double w, double m, 
              double lower, double upper) {
-  double x1;             
+  double x1; // new sample 
+
+	// std::ofstream treef;
+	// treef.open ("slice.txt");
   
-  double gx0 = g->val(x0);
+  double gx0 = g->val(x0); // current loglik
+ 	// treef << "basic comps" << std::endl; 
   double logy = gx0 - R::rexp(1.);
-  double u = R::runif(0., w);
+  double u = R::runif(0., w); 
   double L = x0 - u;
-  double R = x0 + (w-u);
-  
+  double R = x0 + (w - u);
+	// MAYBE CAN AUTOMATICALLY GET A LARGE ENOUGH INTERVAL 
+	// DIRECTLY FROM THE CUTPOINTS 
   while(true) {
     R_CheckUserInterrupt();
     if(L<=lower) { break; }
@@ -22,9 +28,12 @@ double slice(double x0, logdensity* g, double w, double m,
     if(g->val(R)<=logy) { break; }
     R += w;
   }
-  
+//  	treef << "found interval" << std::endl; 
+// 	treef.close();
   if(L<lower) {L=lower;}
   if(R>upper) {R=upper;}
+
+	// [L, R] is our interval to sample x1 uniformly from 
   
   while(true) {
     R_CheckUserInterrupt();

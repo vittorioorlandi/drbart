@@ -1,10 +1,12 @@
 predict_serial <- function(xpred, mids, fit, ts_mean, ts_prec, type, variance, quantiles, ygrid, preds, logprobs, post_fun) {
+  preds <- array(dim = c(nrow(xpred), length(ygrid), length(fit$ucuts)))
   for (j in seq_len(nrow(xpred))) {
     message(paste0('Predicting conditional density ', j, ' of ', nrow(xpred),
                    ' (', round(100 * (j - 1) / nrow(xpred)), '%)', '\r'),
             appendLF = FALSE)
     flush.console()
-    
+  
+    # browser()    
     
     des <- lapply(mids, function(m) {
       do.call(data.frame, c(list(m), as.list(xpred[j, ])))

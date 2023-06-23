@@ -10,7 +10,7 @@ drbart(
   nburn = 5000,
   nsim = 5000,
   nthin = 1,
-  printevery = round((nburn + nsim)/20),
+  printevery = round((nburn + nsim * nthin)/20),
   m_mean = 200,
   m_var = 100,
   alpha = 0.95,

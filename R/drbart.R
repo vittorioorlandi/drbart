@@ -143,7 +143,13 @@ drbart <- function(y, x,
                                  mean_file, prec_file)
   }
   else {
-    out <- drbartRcppClean(y, t(ux), t(ux[1, ]),
+    # out <- drbartRcppClean(y, t(ux), t(ux[1, ]),
+    #                        mean_cuts,
+    #                        nburn, nsim, nthin, printevery,
+    #                        m_mean, alpha, beta,
+    #                        lambda, nu, kfac,
+    #                        censor, mean_file)
+    out <- drbart_l(y, t(ux),
                            mean_cuts,
                            nburn, nsim, nthin, printevery,
                            m_mean, alpha, beta,

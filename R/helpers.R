@@ -200,7 +200,7 @@ preprocess_predict <- function(object, xpred, ygrid, type, quantiles, n_cores) {
   return(list(type = type, 
               variance = variance,
               mean_file = mean_file, 
-              prec_file = prec_file,
+              prec_file = if (variance != 'const') prec_file else NULL,
               post_fun = post_fun, 
               preds = preds))
 }

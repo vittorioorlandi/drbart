@@ -1,3 +1,12 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^README\.Rmd$
+^src/latent_sens_bart\.cpp$
+^R/test_latent_sens\.R$
+^R/srikar\.R$
+^R/testPTT\.R$
+^R/testscript\.R$
+^R/elicit_prior\.R$
+^R/latent_cont\.R$
+^R/lv\.R$
+^R/dgp\.R$
