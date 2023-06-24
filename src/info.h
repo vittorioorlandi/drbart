@@ -1,5 +1,6 @@
 #ifndef GUARD_info_h
 #define GUARD_info_h
+#include <cmath>
 
 //data
 class dinfo {
@@ -12,19 +13,45 @@ public:
 };
 
 //prior and mcmc
-class pinfo
+struct pinfo
 {
-public:
-   pinfo() {pbd=1.0;pb=.5;alpha=.95;beta=.5;tau=1.0;sigma=1.0;}
-//mcmc info
-   double pbd; //prob of birth/death
-   double pb;  //prob of birth
-//prior info
-   double alpha;
-   double beta;
-   double tau;
-//sigma
-   double sigma;
+   //mcmc info
+   double pbd = 1.0; // prob of birth / death
+   double pb = 0.5;  // prob of birth given birth / death
+   
+   //prior info
+   // prior prob a bot node splits is alpha / (1 + depth) ^ beta
+   double alpha = 0.95;
+   double beta = 2.0;
+   double tau = 1.0;
+   
+   //sigma
+   double sigma = 1.0;
+   
+   pinfo() = default; 
+   
+   pinfo(double pbd, double pb, 
+         double alpha, double beta, double tau, 
+         double sigma) {
+      this->pbd = pbd;
+      this->pb = pb;
+      this->alpha = alpha;
+      this->beta = beta;
+      this->tau = tau;
+      this->sigma = sigma;
+   }
+   
+   pinfo(double pbd, double pb, double alpha, double beta, 
+         double miny, double maxy, double kfac, int m, 
+         double sigma) {
+      this->pbd = pbd;
+      this->pb = pb;
+      this->alpha = alpha;
+      this->beta = beta;
+      this->tau = (maxy - miny) / (2 * kfac * sqrt((double) m));
+      this->sigma = sigma;
+   }
+
 };
 
 //sufficient statistics for 1 node

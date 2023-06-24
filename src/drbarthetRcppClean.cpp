@@ -5,6 +5,7 @@
 #include <vector>
 #include <ctime>
 
+#include "read.h"
 #include "rng.h"
 #include "tree.h"
 #include "info.h"
@@ -74,46 +75,15 @@ List drbartRcppHeteroClean(NumericVector y_,
   *****************************************************************************/
   //read x   
   //the n*p numbers for x are stored as the p for first obs, then p for second, and so on.
-  std::vector<double> x;
-  for (NumericVector::iterator it = x_.begin(); it != x_.end(); ++it) {
-    x.push_back(*it);
-  }
+  std::vector<double> x = load_x(x_);
   size_t p = x.size() / n;
-  //begin hetero
-  std::vector<double> xprec;
-  for (NumericVector::iterator it = xprec_.begin(); it != xprec_.end(); ++it) {
-    xprec.push_back(*it);
-  }
+  
+  std::vector<double> xprec = load_x(xprec_);
   size_t pprec = xprec.size() / n;
-  //end hetero
   
-  //x cutpoints
-  xinfo xi;
-  
-  xi.resize(p);
-  for (int i = 0; i < p; ++i) {
-    NumericVector tmp = xinfo_list[i];
-    std::vector<double> tmp2;
-    for (size_t j = 0; j < tmp.size(); ++j) {
-      tmp2.push_back(tmp[j]);
-    }
-    xi[i] = tmp2;
-  }
-  
-  //begin hetero
-  //x precision cutpoints
-  xinfo xiprec;
-  
-  xiprec.resize(pprec);
-  for (int i = 0; i < pprec; ++i) {
-    NumericVector tmp = xinfo_prec_list[i];
-    std::vector<double> tmp2;
-    for (size_t j = 0; j < tmp.size(); ++j) {
-      tmp2.push_back(tmp[j]);
-    }
-    xiprec[i] = tmp2;
-  }
-  //end hetero
+  // cutpoints
+  xinfo xi = load_cutpoints(xinfo_list, p);
+  xinfo xiprec = load_cutpoints(xinfo_prec_list, pprec);
     
   /*****************************************************************************
    Setup for MCMC
@@ -139,29 +109,14 @@ List drbartRcppHeteroClean(NumericVector y_,
   double phistar = phi0;
   
   //--------------------------------------------------
-  //prior and mcmc
-  pinfo pi;
-  pi.pbd = 1.0; //prob of birth/death move
-  pi.pb = .5; //prob of birth given  birth/death
-  
-  pi.alpha = alpha; //prior prob a bot node splits is alpha/(1+d)^beta, d is depth of node
-  pi.beta = beta; //2 for bart means it is harder to build big trees.
-  pi.tau = (maxy - miny) / (2 * kfac*sqrt((double) m)); //sigma_mu
-  pi.sigma = shat;
-  
-  //begin hetero
-  pinfo piprec;
-  piprec.pbd = 1.0; //prob of birth/death move
-  piprec.pb = .5; //prob of birth given  birth/death
-  
-  piprec.alpha = .95; //prior prob a bot node splits is alpha/(1+d)^beta, d is depth of node
-  piprec.beta = 2.0; //2 for bart means it is harder to build big trees.
-  piprec.tau = nu * mprec; // phi_m\sim G(tau, tau)
-  piprec.sigma = 0.0;
-  //end hetero
-  
+  // prior and mcmc
+  // maybe introduce pb/pbd probs as defaults
+  // maybe pimean and piprec structs derived from a pinfo struct 
+  pinfo pi(1.0, 0.5, alpha, beta, miny, maxy, kfac, m, shat); 
+  pinfo piprec(1.0, 0.5, alpha, beta, nu * mprec, 0.0); // phi_m ~ G(tau, tau)
   //--------------------------------------------------
-  //dinfo
+  
+  // dinfo
   double* allfit = new double[n]; //sum of fit of all trees
   for (size_t i = 0; i < n; i++) {
     allfit[i] = ybar;
@@ -175,7 +130,7 @@ List drbartRcppHeteroClean(NumericVector y_,
   di.y = r; //the y for each draw will be the residual 
   
   //--------------------------------------------------
-  //dinfo for precision
+  // dinfo for precision
   double* allfitprec = new double[n]; //sum of fit of all trees
   for (size_t i = 0; i < n; i++) {
     allfitprec[i] = phi0; //phi0 is an "offset"
