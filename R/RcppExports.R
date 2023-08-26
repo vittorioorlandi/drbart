@@ -25,10 +25,6 @@ pmixnorm_post <- function(x, mus, sds, logprobs) {
     .Call(`_drbart_pmixnorm_post`, x, mus, sds, logprobs)
 }
 
-drbartRcppClean <- function(y_, x_, xpred_, xinfo_list, burn, nd, thin, printevery, m, alpha, beta, lambda, nu, kfac, trunc_below, treef_name_) {
-    .Call(`_drbart_drbartRcppClean`, y_, x_, xpred_, xinfo_list, burn, nd, thin, printevery, m, alpha, beta, lambda, nu, kfac, trunc_below, treef_name_)
-}
-
 drbart_l <- function(y_, x_, xinfo_list, burn, nd, thin, printevery, m, alpha, beta, lambda, nu, kfac, trunc_below, treef_name_) {
     .Call(`_drbart_drbart_l`, y_, x_, xinfo_list, burn, nd, thin, printevery, m, alpha, beta, lambda, nu, kfac, trunc_below, treef_name_)
 }

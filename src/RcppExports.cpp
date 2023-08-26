@@ -92,32 +92,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// drbartRcppClean
-List drbartRcppClean(NumericVector y_, NumericVector x_, NumericVector xpred_, List xinfo_list, int burn, int nd, int thin, int printevery, int m, double alpha, double beta, double lambda, double nu, double kfac, IntegerVector trunc_below, CharacterVector treef_name_);
-RcppExport SEXP _drbart_drbartRcppClean(SEXP y_SEXP, SEXP x_SEXP, SEXP xpred_SEXP, SEXP xinfo_listSEXP, SEXP burnSEXP, SEXP ndSEXP, SEXP thinSEXP, SEXP printeverySEXP, SEXP mSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP kfacSEXP, SEXP trunc_belowSEXP, SEXP treef_name_SEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type y_(y_SEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type x_(x_SEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type xpred_(xpred_SEXP);
-    Rcpp::traits::input_parameter< List >::type xinfo_list(xinfo_listSEXP);
-    Rcpp::traits::input_parameter< int >::type burn(burnSEXP);
-    Rcpp::traits::input_parameter< int >::type nd(ndSEXP);
-    Rcpp::traits::input_parameter< int >::type thin(thinSEXP);
-    Rcpp::traits::input_parameter< int >::type printevery(printeverySEXP);
-    Rcpp::traits::input_parameter< int >::type m(mSEXP);
-    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
-    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
-    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
-    Rcpp::traits::input_parameter< double >::type kfac(kfacSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type trunc_below(trunc_belowSEXP);
-    Rcpp::traits::input_parameter< CharacterVector >::type treef_name_(treef_name_SEXP);
-    rcpp_result_gen = Rcpp::wrap(drbartRcppClean(y_, x_, xpred_, xinfo_list, burn, nd, thin, printevery, m, alpha, beta, lambda, nu, kfac, trunc_below, treef_name_));
-    return rcpp_result_gen;
-END_RCPP
-}
 // drbart_l
 List drbart_l(NumericVector y_, NumericVector x_, List xinfo_list, int burn, int nd, int thin, int printevery, int m, double alpha, double beta, double lambda, double nu, double kfac, IntegerVector trunc_below, CharacterVector treef_name_);
 RcppExport SEXP _drbart_drbart_l(SEXP y_SEXP, SEXP x_SEXP, SEXP xinfo_listSEXP, SEXP burnSEXP, SEXP ndSEXP, SEXP thinSEXP, SEXP printeverySEXP, SEXP mSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP kfacSEXP, SEXP trunc_belowSEXP, SEXP treef_name_SEXP) {
@@ -209,7 +183,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_drbart_pmixnorm0_post", (DL_FUNC) &_drbart_pmixnorm0_post, 4},
     {"_drbart_dmixnorm_post", (DL_FUNC) &_drbart_dmixnorm_post, 4},
     {"_drbart_pmixnorm_post", (DL_FUNC) &_drbart_pmixnorm_post, 4},
-    {"_drbart_drbartRcppClean", (DL_FUNC) &_drbart_drbartRcppClean, 16},
     {"_drbart_drbart_l", (DL_FUNC) &_drbart_drbart_l, 15},
     {"_drbart_drbartL", (DL_FUNC) &_drbart_drbartL, 16},
     {"_drbart_drbartRcppHeteroClean", (DL_FUNC) &_drbart_drbartRcppHeteroClean, 20},

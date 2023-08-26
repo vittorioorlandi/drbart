@@ -124,10 +124,13 @@ List drbartRcppHeteroClean(NumericVector y_,
   double* r = new double[n]; //y-(allfit-ftemp) = y-allfit+ftemp
   double* ftemp = new double[n]; //fit of current tree
   dinfo di;
-  di.n = n; 
-  di.p = p; 
-  di.x = &x[0]; 
-  di.y = r; //the y for each draw will be the residual 
+  di.n = n;
+  di.p = p;
+  // di.y = r; //the y for each draw will be the residual
+  
+  // dinfo di(n, p, x);
+  di.x = &x[0];
+  di.y = r;
   
   //--------------------------------------------------
   // dinfo for precision
@@ -138,11 +141,12 @@ List drbartRcppHeteroClean(NumericVector y_,
   double* rprec = new double[n]; // scaled residual
   double* ftempprec = new double[n]; //fit of current tree
   dinfo diprec;
-  diprec.n = n; 
-  diprec.p = pprec; 
-  diprec.x = &xprec[0]; 
-  diprec.y = rprec; //the y for each draw will be the residual 
+  diprec.n = n;
+  diprec.p = pprec;
+  diprec.x = &xprec[0];
+  diprec.y = rprec; //the y for each draw will be the residual
   //end hetero
+  // dinfo diprec(n, pprec, xprec); 
   
   NumericVector ssigma(nd);
   
@@ -188,19 +192,20 @@ List drbartRcppHeteroClean(NumericVector y_,
   slice_density.di = di;
   slice_density.i = 0;
   slice_density.using_u = using_u;
-  
+
   slice_density.scalemix = SCALE_MIX;
-  
+
   slice_density.xiprec = xiprec;
   slice_density.diprec = diprec;
   slice_density.using_uprec = using_uprec;
+  
+  // ld_bartU slice_density(0.0, 1.0, SCALE_MIX);
   //end dr bart
   
   for (size_t i = 0; i < niters; i++) {
     if (i % printevery == 0) {
-      Rprintf("\r");
-      Rprintf("Iteration %d / %d (%d%%)", i, niters, (int) 100 * i / niters);
-      Rprintf("\r");
+      Rcout << "Iteration " << i << " / " << niters << 
+        " (" << (int) 100 * i / niters << "%)\n";
     }
     //draw trees
     for (size_t j = 0; j < m; j++) {
@@ -208,6 +213,7 @@ List drbartRcppHeteroClean(NumericVector y_,
        for (size_t k=0;k<n;k++) {
           allfit[k] = allfit[k] - ftemp[k];
           r[k] = y[k] - allfit[k];
+          // di.y[k] = y[k] - allfit[k]; 
        }
        bdhet(t[j], xi, di, allfitprec, pi, gen);
        drmuhet(t[j], xi, di, allfitprec, pi, gen);
@@ -231,6 +237,7 @@ List drbartRcppHeteroClean(NumericVector y_,
            }
           allfitprec[k] = allfitprec[k] / ftempprec[k];
           rprec[k] = (y[k] - allfit[k]) * sqrt(allfitprec[k]);
+          // diprec.y[k] = (y[k] - allfit[k]) * sqrt(allfitprec[k]);
        }
        bdprec(tprec[j], xiprec, diprec, piprec, gen); 
        drphi(tprec[j], xiprec, diprec, piprec, gen);
@@ -390,7 +397,8 @@ List drbartRcppHeteroClean(NumericVector y_,
         slice_density.f = f;
         slice_density.yobs = y[k];
         double oldu = x[jj + k * p];
-        double newu = slice(oldu, &slice_density, 1.0, INFINITY, 0., 1.);
+        double newu = slice(oldu, &slice_density, 1.0, INFINITY, 0., 1.); //,
+                            // di, diprec, using_u, using_uprec);
         x[jj + k * p] = newu;
         
         if (SCALE_MIX) {
@@ -429,21 +437,21 @@ List drbartRcppHeteroClean(NumericVector y_,
       for (size_t j = 0; j < m;j ++) {
         treef << t[j] << endl;
       }
-      for (size_t j =0; j < mprec; j++) {
+      for (size_t j = 0; j < mprec; j++) {
         treefprec << tprec[j] << endl;
       }
       
       ssigma((i - burn) / thin) = phistar;
     }
   }
-
+  
   t.clear();
   delete[] allfit;
   delete[] r;
   delete[] ftemp;
   
   treef.close();
-
+  
   return(List::create(_["phistar"] = ssigma,
                       _["ucuts"] = ucuts_post,
 											_["uvals"] = uvals));

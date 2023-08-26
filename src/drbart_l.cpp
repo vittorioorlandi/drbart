@@ -143,11 +143,12 @@ List drbart_l(NumericVector y_,
   NumericMatrix uvals(nd, n); 
   
   ld_bartU slice_density(0.0, 1.0);
+  // ld_bartU slice_density(0.0, 1.0, false);
   slice_density.xi = xi;
   slice_density.di = di;
   slice_density.i = 0;
   slice_density.using_u = using_u;
-  
+
   slice_density.scalemix = false;
   
   //end dr bart
@@ -258,6 +259,8 @@ List drbart_l(NumericVector y_,
         slice_density.yobs = y[k];
         double oldu = x[jj + k * p];
         double newu = slice(oldu, &slice_density, 1.0, INFINITY, 0., 1.);
+        // double newu = slice(oldu, &slice_density, 1.0, INFINITY, 0., 1.,
+        //                     di, using_u);
         x[jj + k * p] = newu;
         
         //update counts with new u
