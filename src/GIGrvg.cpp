@@ -157,7 +157,7 @@ SEXP dgig(SEXP sexp_x, SEXP sexp_lambda, SEXP sexp_chi, SEXP sexp_psi, SEXP sexp
 
 /*---------------------------------------------------------------------------*/
 
-#define ZTOL (DOUBLE_EPS*10.0)
+#define ZTOL (DBL_EPSILON*10.0)
 
 SEXP rgig(SEXP sexp_n, SEXP sexp_lambda, SEXP sexp_chi, SEXP sexp_psi)
 /*---------------------------------------------------------------------------*/
